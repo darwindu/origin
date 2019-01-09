@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="origin.GlobalJobMapper">
+
+	<!-- 抢占资源逻辑：当前时间-上次执行时间>时间间隔，如果更新成功，则抢占资源；否则抢占失败; -->
+    <update id="update" parameterType="pd">
+        update global_job j set j.pre_start_interval = #{currInterval}, j.pre_start_dt = #{preStartDt}, j.update_dt = #{preStartDt} where j.job_code = #{jobCode} and j.is_enabled = 'Y' and timestampdiff(second, j.pre_start_dt, #{preStartDt}) >= j.interval_times
+    </update>
+    
+</mapper>
